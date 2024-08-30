@@ -37,21 +37,35 @@ pipeline {
         stage('Deploy to Staging') {
             steps {
                 echo 'Deploying to Staging...'
-                // Add your deployment script or commands here
+                withCredentials([sshUserPrivateKey(credentialsId: 'staging-ssh-key', keyFileVariable: 'SSH_KEY')]) {
+                    sh '''
+                        scp -i $SSH_KEY -r ./dist/ user@staging-server:/path/to/deploy
+                        ssh -i $SSH_KEY user@staging-server "cd /path/to/deploy && npm install"
+                    '''
+                }
             }
         }
 
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Running Integration Tests on Staging...'
-                // Add your integration testing script here
+                withCredentials([sshUserPrivateKey(credentialsId: 'staging-ssh-key', keyFileVariable: 'SSH_KEY')]) {
+                    sh '''
+                        ssh -i $SSH_KEY user@staging-server "cd /path/to/deploy && npm run test:integration"
+                    '''
+                }
             }
         }
 
         stage('Deploy to Production') {
             steps {
                 echo 'Deploying to Production...'
-                // Add your production deployment script or commands here
+                withCredentials([sshUserPrivateKey(credentialsId: 'production-ssh-key', keyFileVariable: 'SSH_KEY')]) {
+                    sh '''
+                        scp -i $SSH_KEY -r ./dist/ user@production-server:/path/to/deploy
+                        ssh -i $SSH_KEY user@production-server "cd /path/to/deploy && npm install"
+                    '''
+                }
             }
         }
     }
