@@ -6,7 +6,7 @@
     "start": "node app.js",
     "test": "mocha",
     "audit": "npm audit",
-    "lint": "eslint .",
+    "lint": "npx eslint .",
     "build": "npm run lint && npm run audit && npm test"
   },
   "dependencies": {
