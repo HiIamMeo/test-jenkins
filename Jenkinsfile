@@ -13,7 +13,6 @@ pipeline {
             steps {
                 bat 'npm install'
                 bat 'npm run build' // assuming you have a build step
-                bat 'nohup npm install &'
             }
         }
 
