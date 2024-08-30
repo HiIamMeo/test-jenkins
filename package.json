@@ -10,7 +10,8 @@
     "build": "npm run lint && npm run audit && npm test"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mocha": "^9.1.3"
   },
   "devDependencies": {
     "chai": "^4.3.4",
