@@ -6,14 +6,14 @@ pipeline {
             steps {
                 echo 'Building...'
                 // Example Maven build command
-                sh 'mvn clean package'
+                bat 'mvn clean package'
             }
         }
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running Unit and Integration Tests...'
                 // Example command to run tests
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
         stage('Code Analysis') {
@@ -21,7 +21,7 @@ pipeline {
                 echo 'Performing Code Analysis...'
                 // SonarQube analysis command
                 withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar'
+                    bat 'mvn sonar:sonar'
                 }
             }
         }
@@ -29,28 +29,28 @@ pipeline {
             steps {
                 echo 'Performing Security Scan...'
                 // Example OWASP ZAP or Checkmarx command
-                sh 'zap-cli quick-scan http://example.com'
+                bat 'zap-cli quick-scan http://example.com'
             }
         }
         stage('Deploy to Staging') {
             steps {
                 echo 'Deploying to Staging...'
                 // Example deployment command
-                sh 'ansible-playbook -i inventory/hosts deploy_staging.yml'
+                sbath 'ansible-playbook -i inventory/hosts deploy_staging.yml'
             }
         }
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Running Integration Tests on Staging...'
                 // Example integration test command
-                sh 'mvn verify'
+                bat 'mvn verify'
             }
         }
         stage('Deploy to Production') {
             steps {
                 echo 'Deploying to Production...'
                 // Example deployment command
-                sh 'ansible-playbook -i inventory/hosts deploy_production.yml'
+                bat 'ansible-playbook -i inventory/hosts deploy_production.yml'
             }
         }
     }
