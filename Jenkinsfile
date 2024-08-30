@@ -1,72 +1,62 @@
 pipeline {
     agent any
+
     stages {
         stage('Build') {
             steps {
-                script {
-                    // Use Maven to build the project
-                    echo 'Building the project...'
-                    sh 'mvn clean install'
-                }
+                echo 'Building...'
+                // Example Maven build command
+                sh 'mvn clean package'
             }
         }
         stage('Unit and Integration Tests') {
             steps {
-                script {
-                    echo 'Running unit and integration tests...'
-                    sh 'mvn test'
-                }
+                echo 'Running Unit and Integration Tests...'
+                // Example command to run tests
+                sh 'mvn test'
             }
         }
         stage('Code Analysis') {
             steps {
-                script {
-                    echo 'Running code analysis...'
-                    // Assuming SonarQube is set up
+                echo 'Performing Code Analysis...'
+                // SonarQube analysis command
+                withSonarQubeEnv('SonarQube') {
                     sh 'mvn sonar:sonar'
                 }
             }
         }
         stage('Security Scan') {
             steps {
-                script {
-                    echo 'Performing security scan...'
-                    // Example command for OWASP ZAP
-                    sh 'zap-cli start && zap-cli quick-scan http://localhost'
-                }
+                echo 'Performing Security Scan...'
+                // Example OWASP ZAP or Checkmarx command
+                sh 'zap-cli quick-scan http://example.com'
             }
         }
         stage('Deploy to Staging') {
             steps {
-                script {
-                    echo 'Deploying to staging...'
-                    // Commands to deploy to staging
-                }
+                echo 'Deploying to Staging...'
+                // Example deployment command
+                sh 'ansible-playbook -i inventory/hosts deploy_staging.yml'
             }
         }
         stage('Integration Tests on Staging') {
             steps {
-                script {
-                    echo 'Running integration tests on staging...'
-                    // Integration testing commands
-                }
+                echo 'Running Integration Tests on Staging...'
+                // Example integration test command
+                sh 'mvn verify'
             }
         }
         stage('Deploy to Production') {
             steps {
-                script {
-                    echo 'Deploying to production...'
-                    // Commands to deploy to production
-                }
+                echo 'Deploying to Production...'
+                // Example deployment command
+                sh 'ansible-playbook -i inventory/hosts deploy_production.yml'
             }
         }
     }
-    // post {
-    //     always {
-    //         mail to: 'your-email@example.com',
-    //              subject: "Pipeline Status: ${currentBuild.fullDisplayName}",
-    //              body: "The status of the pipeline is: ${currentBuild.currentResult}\n\nCheck Jenkins for details.",
-    //              attachLog: true
-    //     }
-    // }
+
+    triggers {
+        // Trigger the pipeline on a GitHub push
+        githubPush()
+    }
 }
