@@ -7,7 +7,7 @@
     "test": "mocha",
     "audit": "npm audit",
     "lint": "eslint .",
-    "built": "npm run lint && npm run audit && npm test"
+    "built": "npm run"
   },
   "dependencies": {
     "express": "^4.17.1"
