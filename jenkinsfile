@@ -1,29 +1,72 @@
-// Pipeline example
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
-            steps {
-                git url: 'https://github.com/HiIamMeo/test-jenkins.git', branch: 'main'
-            }
-        }
         stage('Build') {
             steps {
-                echo 'Building...'
+                script {
+                    // Use Maven to build the project
+                    echo 'Building the project...'
+                    sh 'mvn clean install'
+                }
             }
         }
-        stage('Test') {
+        stage('Unit and Integration Tests') {
             steps {
-                echo 'Testing...'
+                script {
+                    echo 'Running unit and integration tests...'
+                    sh 'mvn test'
+                }
             }
         }
-        stage('Deploy') {
+        stage('Code Analysis') {
             steps {
-                echo 'Deploying...'
+                script {
+                    echo 'Running code analysis...'
+                    // Assuming SonarQube is set up
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+        stage('Security Scan') {
+            steps {
+                script {
+                    echo 'Performing security scan...'
+                    // Example command for OWASP ZAP
+                    sh 'zap-cli start && zap-cli quick-scan http://localhost'
+                }
+            }
+        }
+        stage('Deploy to Staging') {
+            steps {
+                script {
+                    echo 'Deploying to staging...'
+                    // Commands to deploy to staging
+                }
+            }
+        }
+        stage('Integration Tests on Staging') {
+            steps {
+                script {
+                    echo 'Running integration tests on staging...'
+                    // Integration testing commands
+                }
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                script {
+                    echo 'Deploying to production...'
+                    // Commands to deploy to production
+                }
             }
         }
     }
-}
-triggers {
-    githubPush()
+    // post {
+    //     always {
+    //         mail to: 'your-email@example.com',
+    //              subject: "Pipeline Status: ${currentBuild.fullDisplayName}",
+    //              body: "The status of the pipeline is: ${currentBuild.currentResult}\n\nCheck Jenkins for details.",
+    //              attachLog: true
+    //     }
+    // }
 }
