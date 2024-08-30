@@ -6,7 +6,8 @@
     "start": "node app.js",
     "test": "mocha",
     "audit": "npm audit",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "built": "npm run lint && npm run audit && npm test"
   },
   "dependencies": {
     "express": "^4.17.1"
