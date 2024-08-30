@@ -1,7 +1,14 @@
 pipeline {
     agent any
-
+    environment {
+        PATH = "$PATH:C:\\Users\\lephu\\AppData\\Roaming\\npm"
+    }
     stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/HiIamMeo/repository-name.git', branch: 'main'
+            }
+        }
         stage('Build') {
             steps {
                 bat 'npm install'
