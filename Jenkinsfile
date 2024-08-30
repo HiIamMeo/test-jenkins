@@ -38,7 +38,7 @@ pipeline {
             steps {
                 echo 'Deploying to Staging...'
                 withCredentials([sshUserPrivateKey(credentialsId: 'staging-ssh-key', keyFileVariable: 'SSH_KEY')]) {
-                    sh '''
+                    bat '''
                         scp -i $SSH_KEY -r ./dist/ user@staging-server:/path/to/deploy
                         ssh -i $SSH_KEY user@staging-server "cd /path/to/deploy && npm install"
                     '''
@@ -50,7 +50,7 @@ pipeline {
             steps {
                 echo 'Running Integration Tests on Staging...'
                 withCredentials([sshUserPrivateKey(credentialsId: 'staging-ssh-key', keyFileVariable: 'SSH_KEY')]) {
-                    sh '''
+                    bat '''
                         ssh -i $SSH_KEY user@staging-server "cd /path/to/deploy && npm run test:integration"
                     '''
                 }
@@ -61,7 +61,7 @@ pipeline {
             steps {
                 echo 'Deploying to Production...'
                 withCredentials([sshUserPrivateKey(credentialsId: 'production-ssh-key', keyFileVariable: 'SSH_KEY')]) {
-                    sh '''
+                    bat '''
                         scp -i $SSH_KEY -r ./dist/ user@production-server:/path/to/deploy
                         ssh -i $SSH_KEY user@production-server "cd /path/to/deploy && npm install"
                     '''
